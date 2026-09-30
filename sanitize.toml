@@ -1,0 +1,15 @@
+[brand]
+terms = ["STG", "STGLaw", "Schmeisser", "Terra Gomes", "stglaw", "RenavePro", "Cipasa", "Nova Cipasa", "CONVESTE", "ELAW", "AUTOJUR", "Railway"]
+
+[domains]
+internal = ["stglaw.com.br", "stgadvogados.com.br"]
+
+[hosts]
+suffixes = ["sharepoint.com", "onmicrosoft.com", "railway.app"]
+
+[allow]
+# the lock file and the demo's local state (git-ignored)
+paths = [".demo/*", ".demo/**/*"]
+# Example-range phone numbers and invented WhatsApp group ids appear in the fixtures,
+# the tests, the docs and the sample output.
+patterns = ['1555000\d{4}', '55629\d{8}', '12036300000000\d{4}@g\.us']
