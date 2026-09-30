@@ -19,11 +19,16 @@ of. They are framework-agnostic and take bytes:
 from whatsapp_cloud import handle_delivery, verify_challenge
 
 # GET: the one-time handshake
-challenge = verify_challenge(request.query_params, verify_token)   # echo it, or refuse
+challenge = verify_challenge(request.query_params, verify_token)  # echo it, or refuse
 
 # POST: everything else
-result = handle_delivery(raw_body, request.headers.get("X-Hub-Signature-256"), app_secret,
-                         on_event=store_event, on_status=count_status)
+result = handle_delivery(
+    raw_body,
+    request.headers.get("X-Hub-Signature-256"),
+    app_secret,
+    on_event=store_event,
+    on_status=count_status,
+)
 return Response(result.body, status_code=result.status)
 ```
 

@@ -76,12 +76,14 @@ wa-groups create --subject "Example Ltd — matter 4471"
 from whatsapp_cloud import Config, GroupsClient, HttpTransport, JsonFileIndex
 
 config = Config(phone_number_id="...", token="...", dry_run=False)
-groups = GroupsClient(config.phone_number_id, HttpTransport(config),
-                      index=JsonFileIndex("groups.json"))
+groups = GroupsClient(
+    config.phone_number_id, HttpTransport(config), index=JsonFileIndex("groups.json")
+)
 
 guests = GroupsClient.check_guest_list(["+55 62 90000-0000", "+55 62 90000-0001"])
-group = groups.create_idempotent("Example Ltd — matter 4471",
-                                 description="This group is for matter 4471 only.")
+group = groups.create_idempotent(
+    "Example Ltd — matter 4471", description="This group is for matter 4471 only."
+)
 groups.set_icon(group.id, "icons/example.jpg")
 link = groups.invite_link(group.id)
 ```
