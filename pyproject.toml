@@ -1,0 +1,63 @@
+[project]
+name = "whatsapp-cloud-api-client"
+version = "0.1.0"
+description = "A typed Python client for the WhatsApp Cloud API's Groups API: the documented limits enforced before the call, idempotent group creation, webhook signature verification, and a dry-run transport that records what would have been sent"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "Fillipe Loose" }]
+keywords = [
+  "whatsapp",
+  "whatsapp-cloud-api",
+  "groups-api",
+  "meta",
+  "graph-api",
+  "webhook",
+  "idempotency",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Communications :: Chat",
+]
+dependencies = [
+  "httpx>=0.27,<1",
+  "pillow>=10.3",
+]
+
+[project.optional-dependencies]
+dotenv = ["python-dotenv>=1.0"]
+
+[project.urls]
+Homepage = "https://github.com/fillipeml/whatsapp-cloud-api-client"
+Issues = "https://github.com/fillipeml/whatsapp-cloud-api-client/issues"
+
+[project.scripts]
+wa-groups = "whatsapp_cloud.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6", "respx>=0.21"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/whatsapp_cloud"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "N"]
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 130
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"

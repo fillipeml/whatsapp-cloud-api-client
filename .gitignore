@@ -1,0 +1,32 @@
+# secrets and per-installation config
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+
+# state, outputs, demo output, scan output
+.demo/
+logs/
+sanitize-report.*
+
+# AI tooling local state
+.claude/settings.local.json
+.claude/*.local.*
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
