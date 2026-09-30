@@ -10,7 +10,10 @@ updates:
     commit-message:
       prefix: "chore(ci)"
 
-  - package-ecosystem: pip
+  # uv, not pip: the pip ecosystem edits pyproject.toml without regenerating uv.lock, and
+  # CI installs with `uv sync --locked`, so every such pull request fails on a lockfile that
+  # no longer matches. The uv ecosystem updates both.
+  - package-ecosystem: uv
     directory: /
     schedule:
       interval: monthly
