@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: lint + tests + demo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          enable-cache: true
+
+      - name: Install Python and dependencies
+        run: |
+          uv python install 3.12
+          uv sync --locked --dev
+
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Tests (offline)
+        run: uv run pytest -q
+
+      - name: The demo runs with no credentials and sends nothing
+        run: |
+          uv run wa-groups demo | tee demo.txt
+          grep -q "no network call, no credentials, nothing sent" demo.txt
+          grep -q "already existed" demo.txt
+          grep -q "writes withheld by the dry run: 1" demo.txt
+
+      - name: The limits printed are the ones the code enforces
+        run: |
+          uv run wa-groups limits | tee limits.txt
+          grep -q "Max group participants: 8" limits.txt
+          grep -q "not documented" limits.txt
+
+      - name: A tampered webhook is refused
+        run: |
+          uv run wa-groups webhook-replay fixtures/webhooks/participants-update.json --tamper | tee hook.txt
+          grep -q -- "-> 200" hook.txt
+          grep -q "wrong signature: 403" hook.txt
+
+      - name: An icon is judged by its bytes, not its name
+        run: |
+          uv run wa-groups check-icon fixtures/icons/valid-square.jpg
+          ! uv run wa-groups check-icon fixtures/icons/actually-a-png.jpg
+
+      - name: Sending for real is never the default
+        run: |
+          ! grep -rn "dry_run: bool = False" src/
+          grep -q "dry_run: bool = True" src/whatsapp_cloud/config.py
+
+  secrets:
+    name: secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
