@@ -1,0 +1,67 @@
+{
+  "_comment": [
+    "Recorded Graph API responses, so the whole client can be exercised offline: the limit",
+    "checks, the idempotency, the pagination, the parsing and the dry run. Keys are",
+    "'<METHOD> <path>'; a key with several entries replays them in order, and the last one",
+    "repeats so a caller that polls does not exhaust it.",
+    "",
+    "Every group id, phone number, subject and invite link below is invented. The group ids",
+    "follow WhatsApp's '<digits>@g.us' shape so the parsing is exercised on something",
+    "realistic, and the phone numbers are in a range reserved for examples.",
+    "",
+    "The create response is deliberately absent: Meta documents no response body for that",
+    "endpoint, and the demo's create is withheld by the dry run anyway."
+  ],
+  "responses": {
+    "GET 000000000000000/groups": [
+      {
+        "data": {
+          "groups": [
+            {
+              "id": "120363000000000001@g.us",
+              "subject": "Example Ltd — matter 4470",
+              "created_at": "1893456000"
+            },
+            {
+              "id": "120363000000000002@g.us",
+              "subject": "Northwind Cooperative — matter 4469",
+              "created_at": "1893542400"
+            }
+          ]
+        },
+        "paging": { "cursors": { "before": "QVFIU", "after": "QVFIV" } }
+      },
+      {
+        "data": { "groups": [] },
+        "paging": { "cursors": { "before": "QVFIV" } }
+      }
+    ],
+    "GET 120363000000000001@g.us": [
+      {
+        "id": "120363000000000001@g.us",
+        "subject": "Example Ltd — matter 4470",
+        "description": "Standing notice: this group is for matter 4470 only. Anything else goes to the office address.",
+        "participants": [
+          { "wa_id": "15550000001" },
+          { "wa_id": "15550000002" },
+          { "wa_id": "15550000003" }
+        ],
+        "join_approval_mode": "approval_required",
+        "suspended": false,
+        "creation_timestamp": 1893456000,
+        "total_participant_count": 3
+      }
+    ],
+    "GET 120363000000000001@g.us/invite_link": [
+      { "invite_link": "https://chat.whatsapp.com/ExampleInviteCode01" }
+    ],
+    "GET 120363000000000001@g.us/join_requests": [
+      {
+        "data": [
+          { "wa_id": "15550000004" },
+          { "wa_id": "15550000005" }
+        ]
+      }
+    ]
+  }
+}

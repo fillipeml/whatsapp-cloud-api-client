@@ -1,0 +1,17 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "100000000000000",
+      "changes": [
+        {
+          "field": "message_template_status_update",
+          "value": {
+            "event": "APPROVED",
+            "message_template_name": "group_invite_v1"
+          }
+        }
+      ]
+    }
+  ]
+}

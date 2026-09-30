@@ -1,0 +1,65 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "100000000000000",
+      "changes": [
+        {
+          "field": "group_participants_update",
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "15550009999",
+              "phone_number_id": "000000000000000"
+            },
+            "groups": [],
+            "statuses": [
+              {
+                "id": "wamid.EXAMPLEMESSAGE001",
+                "status": "read",
+                "timestamp": "1893888000",
+                "recipient_id": "15550000001",
+                "group_id": "120363000000000001@g.us"
+              },
+              {
+                "id": "wamid.EXAMPLEMESSAGE001",
+                "status": "read",
+                "timestamp": "1893888010",
+                "recipient_id": "15550000002",
+                "group_id": "120363000000000001@g.us"
+              },
+              {
+                "id": "wamid.EXAMPLEMESSAGE001",
+                "status": "read",
+                "timestamp": "1893888020",
+                "recipient_id": "15550000003",
+                "group_id": "120363000000000001@g.us"
+              },
+              {
+                "id": "wamid.EXAMPLEMESSAGE001",
+                "status": "delivered",
+                "timestamp": "1893887900",
+                "recipient_id": "15550000004",
+                "group_id": "120363000000000001@g.us"
+              },
+              {
+                "id": "wamid.EXAMPLEMESSAGE002",
+                "status": "delivered",
+                "timestamp": "1893888100",
+                "recipient_id": "15550000001",
+                "group_id": "120363000000000001@g.us"
+              },
+              {
+                "id": "wamid.EXAMPLEMESSAGE002",
+                "status": "delivered",
+                "timestamp": "1893888110",
+                "recipient_id": "15550000002",
+                "group_id": "120363000000000001@g.us"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

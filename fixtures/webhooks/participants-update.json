@@ -1,0 +1,32 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "100000000000000",
+      "changes": [
+        {
+          "field": "group_participants_update",
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "15550009999",
+              "phone_number_id": "000000000000000"
+            },
+            "groups": [
+              {
+                "timestamp": "1893628800",
+                "group_id": "120363000000000001@g.us",
+                "type": "participant_joined"
+              },
+              {
+                "timestamp": "1893628860",
+                "group_id": "120363000000000001@g.us",
+                "type": "participant_left"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

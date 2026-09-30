@@ -1,0 +1,27 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "100000000000000",
+      "changes": [
+        {
+          "field": "group_lifecycle_update",
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "15550009999",
+              "phone_number_id": "000000000000000"
+            },
+            "groups": [
+              {
+                "timestamp": "1893456000",
+                "group_id": "120363000000000003@g.us",
+                "type": "group_created"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
