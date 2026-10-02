@@ -124,7 +124,7 @@ def log_event(event: GroupEvent) -> None:
     """
     print(
         json.dumps(
-            {"field": event.field_name, "group_id": event.group_id, "value": event.value},
+            {"field": event.field_name, "group_id": event.group_id, "value": event.raw},
             ensure_ascii=False,
         ),
         flush=True,

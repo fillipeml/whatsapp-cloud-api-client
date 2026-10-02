@@ -255,3 +255,30 @@ def test_statuses_reach_their_own_handler() -> None:
     )
     assert result.status == 200
     assert len(seen) == 6
+
+
+# --- the shipped default handler ------------------------------------------------------------
+
+
+def test_the_default_handler_survives_every_shipped_event(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """``log_event`` is what a reader wires up first, so it has to work on every event.
+
+    It did not: it read an attribute ``GroupEvent`` does not have, so the endpoint answered
+    500 to every group event and logged nothing. The suite had a test asserting that a handler
+    which raises is answered 500 — and the handler that raised was the default one. This runs
+    the real delivery path with the real handler, which is the gap that let it ship.
+    """
+    from whatsapp_cloud.server import log_event
+
+    for name in sorted(p.name for p in FIXTURES.glob("*.json")):
+        body = raw(name)
+        result = handle_delivery(body, sign(body, SECRET), SECRET, on_event=log_event)
+        assert result.status == 200, f"{name}: {result.reason}"
+
+    for line in capsys.readouterr().out.splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        assert set(row) == {"field", "group_id", "value"}
