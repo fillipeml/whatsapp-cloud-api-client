@@ -9,6 +9,7 @@
 # state, outputs, demo output, scan output
 .demo/
 logs/
+sanitize.toml
 sanitize-report.*
 
 # AI tooling local state
