@@ -122,6 +122,18 @@ def test_every_problem_is_reported_at_once_not_one_per_round_trip() -> None:
     assert problems(ICONS / "valid-square.jpg") == []
 
 
+def test_a_wide_image_does_not_hide_its_undersized_height() -> None:
+    """The shorter side decides, not the width.
+
+    512x100 clears the minimum on its width and fails on its height. The check looked only at
+    the width, so this icon came back saying "not square" and nothing else — which sends the
+    caller to crop it square at 512 and be refused a second time for the same reason.
+    """
+    found = problems(ICONS / "wide-and-short.jpg")
+    assert any("not square" in p for p in found)
+    assert any("below the" in p for p in found), found
+
+
 def test_inspect_reports_facts_without_judging_them() -> None:
     facts = inspect(ICONS / "not-square.jpg")
     assert (facts.width, facts.height) == (512, 288)

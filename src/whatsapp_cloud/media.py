@@ -108,6 +108,10 @@ def problems(path: str | Path) -> list[str]:
         found.append(f"format is {facts.image_format}, not {ICON_FORMAT}")
     if not facts.is_square:
         found.append(f"{facts.width}x{facts.height} is not square")
-    if facts.width < ICON_MIN_SIDE_PX:
-        found.append(f"{facts.width}px is below the {ICON_MIN_SIDE_PX}px minimum")
+    if min(facts.width, facts.height) < ICON_MIN_SIDE_PX:
+        # The shorter side, not the width. `problems` promises every reason an icon would be
+        # refused, and a wide, short image hid its undersized dimension behind "not square".
+        found.append(
+            f"{min(facts.width, facts.height)}px is below the {ICON_MIN_SIDE_PX}px minimum"
+        )
     return found
