@@ -11,7 +11,7 @@ import httpx
 import pytest
 import respx
 
-from whatsapp_cloud.config import Config
+from whatsapp_cloud.config import DEFAULT_GRAPH_VERSION, Config
 from whatsapp_cloud.errors import ApiError, NotEligibleForGroupsError
 from whatsapp_cloud.transport import (
     DRY_RUN_GROUP_ID,
@@ -44,7 +44,7 @@ class Clock:
         self.slept.append(seconds)
 
 
-def url(path: str, version: str = "v26.0") -> str:
+def url(path: str, version: str = DEFAULT_GRAPH_VERSION) -> str:
     return f"https://graph.facebook.com/{version}/{path}"
 
 
