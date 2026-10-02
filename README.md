@@ -27,7 +27,8 @@ DEMO — recorded API responses, no network call, no credentials, nothing sent.
 3. accept a list at the documented maximum, and say what is uncertain about it
    8 guests is the documented maximum, but Meta does not say whether the business phone
    number occupies one of those places. If it does, the last invitation is refused, and
-   there is no endpoint that adds a participant afterwards.
+   there is no endpoint that adds a participant afterwards. Consider inviting one fewer,
+   or confirm the behaviour on your own account first.
 
 4. create the group, idempotently
   [dry run] POST 000000000000000/groups json=['description', 'join_approval_mode',
@@ -38,8 +39,11 @@ DEMO — recorded API responses, no network call, no credentials, nothing sent.
 5. inspect the group that the recordings describe
    120363000000000001@g.us
      subject     Example Ltd — matter 4470
+     description Standing notice: this group is for matter 4470 only. Anything else
+                 goes to the office address.
      joining     needs approval
      people      3 besides the business
+     created     2030-01-01
 
 6. the invite link, which is the only way in
    https://chat.whatsapp.com/ExampleInviteCode01
@@ -239,7 +243,7 @@ secret, business or person appears anywhere in it.
 ## Tests
 
 ```bash
-pytest          # 151 tests, all offline
+pytest          # 153 tests, all offline
 ruff check .
 ruff format --check .
 ```

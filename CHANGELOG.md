@@ -16,9 +16,9 @@ First public release: a client for the Groups API of Meta's WhatsApp Cloud API, 
 - Four transports behind one protocol: the real HTTP one with retries on 429 and 5xx that honour `Retry-After`, a dry-run one that records withheld writes while passing reads through to the live API, a recorded one that replays captured responses and can also express a failure, and a failing one for testing error handling.
 - Webhook handling as pure functions over bytes: HMAC-SHA256 verification over the raw body in constant time with no SHA-1 fallback, refusing everything when no secret is configured; the verification handshake with the challenge echoed unchanged; parsing that dispatches on `value.groups[].type` rather than on the subscription field; and aggregation-aware status parsing that returns every status with a key stable across the seven days Meta may retry.
 - Webhook responses that mean what they say: 403 for an unverified signature, 400 for a body that cannot be accepted, 500 when a handler raised so the retry is used, and 200 only for received-and-handled.
-- A standard-library webhook server, and a command line covering every endpoint plus `limits`, `check-icon`, `check-guests`, `cost`, `webhook-replay` and an offline `demo`.
+- A standard-library webhook server, and a command line covering the group lifecycle plus `limits`, `check-icon`, `check-guests`, `cost`, `webhook-replay` and an offline `demo`.
 - Typed boundary models that keep their raw payload, with `total_participant_count` used as Meta defines it rather than adjusted.
 - `docs/GROUPS_API.md`, recording what Meta documents, what was observed on a dated probe, and what Meta does not document at all — including three claims repeated across vendor pages that appear in no Meta document.
-- 151 offline tests, a Dependabot configuration, and CI that lints, tests, and asserts the demo's behaviour, the printed limits, a refused tampered webhook, a PNG caught by its bytes, and that the dry run is still the default.
+- 153 offline tests, a Dependabot configuration, and CI that lints, tests, and asserts the demo's behaviour, the printed limits, a refused tampered webhook, a PNG caught by its bytes, and that the dry run is still the default.
 
 [0.1.0]: https://github.com/fillipeml/whatsapp-cloud-api-client/releases/tag/v0.1.0
