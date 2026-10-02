@@ -165,6 +165,77 @@ is where you would look:
   statuses for one message. Code that reads the first element under-counts reads, and nothing
   about the resulting number looks wrong. See [docs/WEBHOOKS.md](docs/WEBHOOKS.md).
 
+## Known failure modes
+
+Five things that go wrong with this API, and what this client does about each.
+
+**The number is not eligible.** The Groups API requires Official Business Account status, which
+Meta does not grant to test accounts, so there is no sandbox. An ineligible number gets its own
+exception class rather than a generic error, because it is neither a bug nor transient and no
+amount of retrying will change it — a provisioning run that meets it should stop and tell a
+person.
+
+**Read and delivery receipts are aggregated.** One webhook can carry many participants' statuses
+for one message, or many messages' statuses for one participant. Code that reads the first
+element of the array under-counts reads, and nothing about the resulting number looks wrong.
+Every status is returned separately with a deduplication key, because Meta also redelivers for
+up to seven days.
+
+**The participant cap is ambiguous and this client will not resolve it.** Meta publishes a
+maximum of eight and never says whether the business number occupies one of those places; its
+own `total_participant_count` is defined as the count excluding the business, which cuts against
+the reading every vendor page asserts. So a list of eight is accepted *and* flagged, because
+refusing at seven would mean this library asserting a limit its vendor does not — and there is
+no endpoint that adds a participant later, so being wrong in that direction leaves somebody
+outside the group.
+
+**The Graph API version expires.** Versions retire on a published schedule, so a client that
+pins one in its source is wrong from the day it ships. The version is configuration; set
+`WA_GRAPH_VERSION` rather than waiting for a release of this package.
+
+**The invite link is a credential.** It is the only way into a group, there is no endpoint that
+adds a participant, and a link that was forwarded around keeps working until it is reset. Treat
+it accordingly, and use `reset_invite_link` when one has been somewhere it should not.
+
+## How AI was used
+
+No model is involved at runtime — this is a plain HTTP client.
+
+An AI coding assistant was used to build it, and the part worth reporting is what it was *not*
+trusted with. Before publishing anything that asserts a fact about Meta's API, I ran three
+independent verification passes against Meta's own documentation and reconciled them. That pass
+found two real bugs carried over from the private original — `DELETE /participants` takes an
+array of objects keyed `user` rather than a list of numbers, and the list endpoint pages under
+`data.groups` rather than `data` — plus three missing endpoint families, a stale default
+version, and a required body field on four endpoints rather than one.
+
+It also found that the universally repeated claim about the participant cap appears in no Meta
+document at all. One of the verifiers caught itself inventing a plausible JSON response body
+for a field Meta leaves undocumented, which is why the method is verbatim extraction rather
+than "summarise this page", and why no vendor or reseller page is cited anywhere in this
+repository.
+
+**Validated:** several tests exist specifically to pin a request shape that is not the one you
+would guess, and each says in a comment why, so a later change that "simplifies" one fails with
+an explanation. Commits were made with an AI assistant; attribution trailers are omitted and
+the usage is documented here.
+
+## Data and privacy
+
+In production this client handles phone numbers, group membership and message content on behalf
+of a business — personal data under both the GDPR and Brazil's LGPD.
+
+Three things follow in the design. Credentials are read from the environment, never written to
+disk by this package, and kept out of `repr` and of `Config.redacted()`. The dry-run transport
+logs the *field names* of a withheld write and never their values, so a provisioning script can
+be reviewed without a client's data reaching a log. And webhook deliveries are refused outright
+when no app secret is configured, rather than being trusted — treating a missing secret as
+permission to skip the check turns a public URL into an open event injector.
+
+This repository runs on fictional data only: phone numbers in ranges reserved for examples,
+invented group identifiers, and an invite link that goes nowhere. No real number, token, app
+secret, business or person appears anywhere in it.
+
 ## Tests
 
 ```bash
@@ -181,12 +252,6 @@ express a failure as well as a success, because error handling is half of what a
 Several tests exist specifically to pin a shape that is not the one you would guess — the
 participant objects, the nested page, the four bodies that carry `messaging_product` — and say
 so in a comment, so a future change that "simplifies" one of them fails with an explanation.
-
-## Fictional data
-
-Every phone number in the fixtures is in a range reserved for examples, every group id is
-invented, and the invite link goes nowhere. No real number, token, app secret, business or
-person appears anywhere in the repository.
 
 ## Built with
 
