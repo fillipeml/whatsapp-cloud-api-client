@@ -29,7 +29,11 @@ from .errors import LimitExceededError
 from .models import SendResult
 from .transport import JsonDict, Request, Transport
 
-DEFAULT_LANGUAGE = "pt_BR"
+#: The template language used when a caller does not name one. It must match the language
+#: the template was registered under in the WhatsApp Manager, or Meta rejects the send — so
+#: there is no default that is right everywhere, and this one is merely neutral. Pass
+#: ``language=`` explicitly for anything but English.
+DEFAULT_LANGUAGE = "en_US"
 
 #: The maximum a WhatsApp text message body can carry. Checked locally because a truncated
 #: legal notice is worse than a refused one.
