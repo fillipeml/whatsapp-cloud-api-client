@@ -23,12 +23,12 @@ classifiers = [
   "Topic :: Communications :: Chat",
 ]
 dependencies = [
-  "httpx>=0.27,<1",
-  "pillow>=10.3",
+  "httpx>=0.28.1,<1",
+  "pillow>=12.3.0",
 ]
 
 [project.optional-dependencies]
-dotenv = ["python-dotenv>=1.0"]
+dotenv = ["python-dotenv>=1.2.3"]
 
 [project.urls]
 Homepage = "https://github.com/fillipeml/whatsapp-cloud-api-client"
@@ -38,7 +38,7 @@ Issues = "https://github.com/fillipeml/whatsapp-cloud-api-client/issues"
 wa-groups = "whatsapp_cloud.cli:main"
 
 [dependency-groups]
-dev = ["pytest>=8", "ruff>=0.6", "respx>=0.21"]
+dev = ["pytest>=9.1.1", "ruff>=0.16.9", "respx>=0.23.1"]
 
 [build-system]
 requires = ["hatchling"]
